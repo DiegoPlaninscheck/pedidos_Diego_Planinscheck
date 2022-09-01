@@ -20,10 +20,9 @@ async function createOrder(data) {
         for (const orderId of orders) {
             if (data.userId == orderId.userId) {
                 return { message: "This user have a order!" }
-            } else {
-                // return await crud.save(tableName, undefined, data);
             }
         }
+        return await crud.save(tableName, undefined, data);
     }
 }
 

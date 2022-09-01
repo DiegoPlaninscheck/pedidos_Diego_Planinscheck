@@ -14,19 +14,19 @@ async function getOrderProduct(id) {
 }
 
 async function createOrderProduct(data) {
-    const orders = await ordersHandler.getOrders();
+    const order = (await ordersHandler.getOrders()).find(e => e.id == data.orderId);
     const products = await productsHandler.getProducts();
-    const product = await products.filter(e => e.id == data.productId);
-    const order = await orders.filter(e => e.id == data.orderId);
-    if (order == "" || order == []) {
-        return { message: "This order doesn't exists!" }
-    } else {
-        if (product == "" || product == []) {
-            return { message: "This product doesn't exists!" }
-        } else {
-            // return await crud.save(tableName, undefined, data);
-        }
+    if(order == undefined){
+        return {message: "This order doesn't exists!"}
     }
+
+    for(const product of products){
+        for(){
+            
+        }
+        console.log(product);
+    }
+
 }
 
 async function editOrderProduct(data, id) {
