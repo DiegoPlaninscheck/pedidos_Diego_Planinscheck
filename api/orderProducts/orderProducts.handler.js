@@ -65,7 +65,33 @@ async function closeOrder(idOrder) {
 }
 
 async function editOrderProduct(data, id) {
-  return await crud.save(tableName, id, data);
+  const order = await ordersHandler.getOrder(data.orderId);
+  const ordersProduct = await getOrderProducts();
+  const orderProduct = await getOrderProduct(id);
+  if (order.status == "Fechado") {
+    // return { message: "This order is closed" };
+  }
+  const productsId = data.productsId;
+
+  let newData = {};
+  let savedData;
+console.log(orderProduct);
+  for (const dataProductId of productsId) {
+    for (const products of ordersProduct) {
+      for (const productId of products.productsId) {
+        if (dataProductId.productId != productId.productId) {
+          savedData = productId;
+        }
+        if (dataProductId.productId == productId.productId) {
+          newData = {
+            orderId: orderProduct.orderId,
+            productsId: [savedData, { productId: productId.productId, quantity: (productId.quantity + dataProductId.quantity) }]
+          }
+        }
+        // await crud.save(tableName, id, newData);
+      }
+    }
+  }
 }
 
 async function removeOrderProduct(id) {
