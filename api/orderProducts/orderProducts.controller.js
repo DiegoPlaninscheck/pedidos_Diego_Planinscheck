@@ -20,6 +20,10 @@ router.put('/:id', async (req, res) => {
     res.json(await orderProductsHandler.editOrderProduct(req.body, req.params.id));
 })
 
+router.put('/closeOrder/:id', async (req, res) => {
+    res.json(await orderProductsHandler.closeOrder(req.params.id));
+})
+
 router.delete('/:id', async (req, res) => {
     res.json(await orderProductsHandler.removeOrderProduct(req.params.id));
 })
