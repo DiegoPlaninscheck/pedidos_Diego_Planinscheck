@@ -66,36 +66,48 @@ async function closeOrder(idOrder) {
 
 async function editOrderProduct(data, id) {
   const order = await ordersHandler.getOrder(data.orderId);
-  const ordersProduct = await getOrderProducts();
   const orderProduct = await getOrderProduct(id);
   if (order.status == "Fechado") {
     // return { message: "This order is closed" };
   }
   const productsId = data.productsId;
+  const teste = orderProduct.productsId;
 
   let newData = {};
-  let savedData;
-console.log(orderProduct);
+  let savedData = {};
+
   for (const dataProductId of productsId) {
-    for (const products of ordersProduct) {
-      for (const productId of products.productsId) {
-        if (dataProductId.productId != productId.productId) {
-          savedData = productId;
-        }
-        if (dataProductId.productId == productId.productId) {
-          newData = {
-            orderId: orderProduct.orderId,
-            productsId: [savedData, { productId: productId.productId, quantity: (productId.quantity + dataProductId.quantity) }]
-          }
+    if (dataProductId.productId == teste.productId) {
+      savedData = dataProductId
+    }
+    for (const productId of orderProduct.productsId) {
+      if (dataProductId.productId == productId.productId) {
+        newData = {
+          orderId: orderProduct.orderId,
+          productsId: [savedData, { productId: productId.productId, quantity: (productId.quantity + dataProductId.quantity) }]
         }
         // await crud.save(tableName, id, newData);
       }
     }
+    console.log(newData);
   }
 }
 
 async function removeOrderProduct(id) {
-  return await crud.remove(tableName, id);
+  const orderProduct = await getOrderProduct(id);
+  const order = await ordersHandler.getOrders();
+
+  for (const orderId of order) {
+    if (orderProduct.orderId == orderId.id) {
+      if (orderId.status == "Fechado") {
+        // return { message: "This order is closed" };
+      }
+    }
+  }
+
+
+
+  // return await crud.remove(tableName, id);
 }
 
 module.exports = {
